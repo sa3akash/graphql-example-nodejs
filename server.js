@@ -6,7 +6,7 @@ const { graphqlHTTP } = require("express-graphql");
 dotenv.config();
 
 const schema = require("./graphql/schema");
-
+const {authenticate} = require("./middleware/auth")
 
 connectDB();
 
@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-
+app.use(authenticate)
 app.use('/graphql', graphqlHTTP({
   schema,
   graphiql: true

@@ -1,10 +1,12 @@
 const { GraphQLString } = require("graphql");
-const { User } = require("../models");
+const { User, Post } = require("../models");
 const { createToken } = require("../utils/auth");
+const { PostType } = require("./types");
 
 // Define the register mutation correctly
 const register = {
   type: GraphQLString,
+  description: "Register a new user",
   args: {
     username: { type: GraphQLString },
     email: { type: GraphQLString },
@@ -41,6 +43,8 @@ const register = {
 
 const login = {
   type: GraphQLString,
+  description: "Login a user",
+
   args: {
     email: { type: GraphQLString },
     password: { type: GraphQLString },
@@ -65,5 +69,30 @@ const login = {
   },
 };
 
+
+const addPost = {
+  type: PostType,
+  description: "Add a new post",
+  args: {
+    title: { type: GraphQLString },
+    body: { type: GraphQLString },
+  },
+  resolve: async (parent, args, {user}) => {
+    const { title, body } = args;
+
+    if(!user.id){
+      throw new Error("Unauthorized.")
+    }
+
+    const post = new Post({
+      title,
+      body,
+      authorId: user.id
+    });
+    await post.save();
+    return post;
+  },
+}
+
 // Export the register mutation
-module.exports = { register, login };
+module.exports = { register, login, addPost };

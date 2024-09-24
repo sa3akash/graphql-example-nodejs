@@ -52,7 +52,7 @@ const PostType = new GraphQLObjectType({
             },
         },
         comment: {
-            type: GraphQLList(CommentType),
+            type: new GraphQLList(CommentType),
             resolve(parant, args) {
                 return Comment.find({postId: parant.id});
             },
