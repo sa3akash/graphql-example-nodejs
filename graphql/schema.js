@@ -1,24 +1,28 @@
-// required graphql modules
-const { GraphQLSchema, GraphQLObjectType } = require("graphql");
+// GraphQL schema definition  
+const { GraphQLSchema, GraphQLObjectType } = require("graphql");  
+const { register, login } = require("./mutation");  
+const { users } = require("./queries");
 
-// import queries
+// Define query type  
+const QueryType = new GraphQLObjectType({  
+  name: "QueryType",  
+  description: "Queries",  
+  fields: {
+    users
+  },  
+});  
 
-// import mutations
+// Define mutation type  
+const MutationType = new GraphQLObjectType({  
+  name: "MutationType",  
+  description: "Mutation",  
+  fields: {  
+    register,
+    login  
+  },  
+});  
 
-// define query type
-const QueryType = new GraphQLObjectType({
-    name: "QueryType",
-    description: 'Queries',
-    fields: {}
-})
-// define mutarion type
-const MutationType = new GraphQLObjectType({
-    name: "MutationType",
-    description: 'Mutation',
-    fields: {}
-})
-
-module.exports = new GraphQLSchema({
-    query: QueryType,
-    mutation: MutationType
-})
+module.exports = new GraphQLSchema({  
+  query: QueryType,  
+  mutation: MutationType,  
+});  
